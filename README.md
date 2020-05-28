@@ -1,7 +1,5 @@
 # aiplayground.ts
 
-A reinforcement learning playground written in typescript.
-
 ## Commiting
 > ./commit.sh "My Commit Message"
 
