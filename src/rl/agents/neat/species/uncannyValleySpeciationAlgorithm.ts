@@ -72,6 +72,7 @@ export default class UncannyValleySpeciationAlgorithm extends SpeciationAlgorith
                         
                         if (isCompatible) {
                             genome.species = species;
+                            species.genomes.push(genome);
                             break;
                         }
                     }
@@ -95,11 +96,13 @@ export default class UncannyValleySpeciationAlgorithm extends SpeciationAlgorith
                         }
                     }
 
+                    // If better compatible with parent species...
                     if (genome.compatibilityDistance(genome.species.leader, this.params) < minCompatDistance) {
                         closestSpecies = genome.species;
                     }
 
                     genome.species = closestSpecies;
+                    closestSpecies?.genomes.push(genome);
                 }
             }
         }

@@ -58,7 +58,7 @@ export default class Species {
 
 		const fittestParentsCutoffReal = this.genomes.length * fittestParentsCutoffProportion;
 		this.fittestParentsCutoff = Math.min(Math.max(2, Helper.stochasticRound(fittestParentsCutoffReal)), this.genomes.length);
-
+	
 		// If there is only one parent, we fallback to asexual reproduction
 		if (this.fittestParentsCutoff === 1) {
 			this.asexualReproductionCount += this.sexualReproductionCount;

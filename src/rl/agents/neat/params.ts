@@ -71,7 +71,7 @@ export default class NEATParams {
     /**
      * Proportion of parents to pick amongst the fittest genomes of a species.
      */
-    public readonly fittestParentsCutoffProportion = new Scalar('Epoch', 'Parents proportion amongst fittest', 0.3).ranged(0, 1);
+    public readonly fittestParentsCutoffProportion = new Scalar('Epoch', 'Parents proportion amongst fittest', 0.5).ranged(0, 1);
 
     // -----------------
     //  Mutation Params

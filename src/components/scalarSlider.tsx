@@ -42,8 +42,9 @@ export default class ScalarSlider extends React.Component<IProps, IState> {
         return String(Math.round(f * 1000) / 1000.0);
     }
 
-    public componentWillMount() {
-        this.setState({ value: this.props.scalar.value, input: String(this.props.scalar.value) });
+    constructor(props) {
+        super(props);
+       this.state = { value: this.props.scalar.value, input: String(this.props.scalar.value) };
     }
 
     public render() {

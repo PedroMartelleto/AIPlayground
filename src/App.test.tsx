@@ -2,6 +2,7 @@ import Species from "./rl/agents/neat/species";
 import Community from "./rl/agents/neat/community";
 import NEATParams from "./rl/agents/neat/params";
 import UncannyValleySpeciationAlgorithm from "./rl/agents/neat/species/uncannyValleySpeciationAlgorithm";
+import Helper from "./rl/agents/neat/utils/helper";
 
 describe("NEAT", () => {
 	it("does crossover", () => {
@@ -35,8 +36,16 @@ describe("NEAT", () => {
 		const bestGenome = community.genomes[community.genomes.length - 1];
 		bestGenome.fitness = 100;
 	
-		community.epoch();
-		
+		for (let i = 0; i < Helper.randomInt(2, 20); ++i) {
+			community.epoch();
+			
+			for (const genome of community.genomes) {
+				if (genome.id !== bestGenome.id) {
+					genome.fitness = 1;
+				}
+			}
+		}
+
 		expect(community.bestGenome!.id).toEqual(bestGenome.id);
 		expect(community.species[community.bestSpeciesIndex].genomes[0].fitness).toEqual(bestGenome.fitness);
 		expect(community.species[community.bestSpeciesIndex].genomes[0].id).toEqual(bestGenome.id);

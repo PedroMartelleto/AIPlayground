@@ -26,7 +26,7 @@ export default class Core extends React.Component<IProps, any> {
 
 	public canvasContext?: CanvasRenderingContext2D;
 
-	public timeScale = 1;
+	public timeScale = 2;
 
 	private lastTime = 0;
 	private unprocessedTime = 0;
@@ -40,12 +40,12 @@ export default class Core extends React.Component<IProps, any> {
 
 		this.start();
 	}
-
-	public componentWillMount() {
-        window.addEventListener("resize", this.resize.bind(this));
-	}
 	
-    public componentDidMount() {
+	public componentDidMount() {
+		window.addEventListener("resize", this.resize.bind(this));
+	}
+
+    public componentWillUnmount() {
         window.removeEventListener("resize", this.resize.bind(this));
     }
 

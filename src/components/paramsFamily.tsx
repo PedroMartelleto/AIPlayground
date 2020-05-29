@@ -52,7 +52,9 @@ export default class ParamsFamily extends React.Component<IProps, IState> {
     // We use static variables to allow communication between IProps and our static mapping functions
     private static sTint: "primary" | "secondary";
 
-    public componentWillMount() {
+    public constructor(props) {
+        super(props);
+
         const families: IScalarFamily[] = [];
 
         // Separates the scalar array from props by families and stores them in the state.
@@ -105,7 +107,7 @@ export default class ParamsFamily extends React.Component<IProps, IState> {
             }
         }
 
-        this.setState({ families, stringFamilies });
+        this.state = { families, stringFamilies };
     }
 
     public render() {

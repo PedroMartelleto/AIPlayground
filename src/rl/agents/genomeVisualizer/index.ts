@@ -92,8 +92,8 @@ export default class GenomeVisualizerAgent extends AgentModel {
 			Draw.normWidth = Draw.normHeight = true;
 
 			if (!!this.popDrawData && !!this.popDrawData[this.popDrawIndex] && !!this.popDrawData[this.popDrawIndex].neurons && !!this.phenotype) {
-				Draw.linkShadowBlur = 2;
-				Draw.neuronShadowBlur = 7;
+				Draw.linkShadowBlur = 0; // 2;
+				Draw.neuronShadowBlur = 0; // 7;
 				Draw.neuralNetwork(0, 0.1, 0.3, 0.5, 0.003, this.popDrawData[this.popDrawIndex].neurons, this.popDrawData[this.popDrawIndex].links, this.phenotype);
 			}
 

@@ -209,7 +209,7 @@ export default class Community {
 		// Creates offspring.
 		const offspring = this.createOffspring();
 
-		console.assert(totalOffspringCount === offspring.length, "Too little or too many offspring have been created!");
+		console.assert(totalOffspringCount === offspring.length, `The number of offspring created (${offspring.length}) does not match the desired amount (${totalOffspringCount}).`);
 
 		// Trims species back to their elite genomes.
 		const emptySpeciesFlag = this.trimSpeciesBackToElite();
@@ -533,16 +533,17 @@ export default class Community {
 
 			// Ensures that the best genome is passed to the next generation
 			if (i === this.bestSpeciesIndex && eliteSize <= 0) {
+				console.assert(this.species[this.bestSpeciesIndex].genomes.length > 0, "The best species must have at least one genome.");
 				eliteSize = 1;
 			}
 
 			species.eliteSize = eliteSize;
 			species.offspringCount = species.spawnCount - eliteSize;
 
-			totalOffspringCount += species.offspringCount;
-
 			// Computes asexual and sexual reproduction count, as well as the number of fittest genomes that will be used as parents
 			species.computeOffspringStats(this.params.offspringAsexualProportion.value, this.params.fittestParentsCutoffProportion.value);
+
+			totalOffspringCount += species.offspringCount;
 		}
 
 		return totalOffspringCount;
@@ -703,6 +704,11 @@ export default class Community {
 		this.bestFitnesses[this.generationCounter - 1] = -1;
 
 		for (let i = 0; i < this.species.length; ++i) {
+			this.species[i].spawnCount = 0;
+			this.species[i].offspringCount = 0;
+			this.species[i].sexualReproductionCount = 0;
+			this.species[i].asexualReproductionCount = 0;
+
 			// Best genome from specices
 			const genome = this.species[i].genomes[0];
 
