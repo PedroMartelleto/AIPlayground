@@ -45,7 +45,7 @@ export default class GenomeVisualizerAgent extends AgentModel {
 		this.currentGenome = genome;
         this.phenotype = genome.createPhenotype();
         this.latexFormula = this.phenotype!.generateFormula(this.env.obsFormulaNames(), 2);
-
+		console.log(this.latexFormula);
 		++this.popDrawIndex;
 	}
 
@@ -92,20 +92,26 @@ export default class GenomeVisualizerAgent extends AgentModel {
 			Draw.normWidth = Draw.normHeight = true;
 
 			if (!!this.popDrawData && !!this.popDrawData[this.popDrawIndex] && !!this.popDrawData[this.popDrawIndex].neurons && !!this.phenotype) {
-				Draw.linkShadowBlur = 0; // 2;
-				Draw.neuronShadowBlur = 0; // 7;
-				Draw.neuralNetwork(0, 0.1, 0.3, 0.5, 0.003, this.popDrawData[this.popDrawIndex].neurons, this.popDrawData[this.popDrawIndex].links, this.phenotype);
+				Draw.linkShadowBlur = 0;
+				Draw.inputNeuronShadowBlur = 10;
+				Draw.hiddenNeuronShadowBlur = 20;
+				Draw.outputNeuronShadowBlur = 10;
+				Draw.inputNeuronRadius = 0.005;
+				Draw.hiddenNeuronRadius = 0.006;
+				Draw.outputNeuronRadius = 0.0065;
+				Draw.linkLineWidth = 1;
+				Draw.neuralNetwork(0, 0, 0.4, 0.95, this.popDrawData[this.popDrawIndex].neurons, this.popDrawData[this.popDrawIndex].links, this.phenotype);
 			}
 
 			// Draws genotype
-			Draw.normX = Draw.normY = false;
-			Draw.text(-Draw.width()/2 + 64, -Draw.height()/3.2, 'Genotype:', '300 21px sans-serif', 'black');
-			Draw.genome(-Draw.width()/2 + 64, -Draw.height()/2.9, this.currentGenome!);
+			// Draw.normX = Draw.normY = false;
+			// Draw.text(-Draw.width()/2 + 64, -Draw.height()/3.2, 'Genotype:', '300 21px sans-serif', 'white');
+			// Draw.genome(-Draw.width()/2 + 64, -Draw.height()/2.9, this.currentGenome!, 'white');
 			Draw.normX = Draw.normY = true;
 
 			// Draws phenotype label
-			Draw.normX = false;
-			Draw.text(-Draw.width()/2 + 8, 0.34, 'Phenotype (' + this.genomeNames[this.popDrawIndex] + '):', '300 21px sans-serif', 'black', 'left');
+			// Draw.normX = false;
+			// Draw.text(-Draw.width()/2 + 8, 0.44, 'Phenotype (' + this.genomeNames[this.popDrawIndex].replace(".genome", "") + '):', '300 21px sans-serif', 'white', 'left');
 			Draw.normX = true;
 			
 			// Draws all latex formulas
@@ -119,14 +125,12 @@ export default class GenomeVisualizerAgent extends AgentModel {
 
 			const width = 1 / this.popDrawData.length;
 
-			Draw.linkShadowBlur = 0;
-			Draw.neuronShadowBlur = 0;
 			for (let i = 0; i < this.genomes.length; ++i) {
 				if (i === this.popDrawIndex) {
 					continue;
 				}
 
-				Draw.neuralNetwork((i*width - 0.5) * 2 + width, -0.7, 0.125, 0.18, 0.002, this.popDrawData[i].neurons, this.popDrawData[i].links, undefined);
+				Draw.neuralNetwork((i*width - 0.5) * 2 + width, -0.7, 0.125, 0.18, this.popDrawData[i].neurons, this.popDrawData[i].links, undefined);
 
 				if (i < this.popDrawIndex) {
 					Draw.normX = false;

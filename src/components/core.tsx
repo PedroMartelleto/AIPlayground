@@ -26,7 +26,7 @@ export default class Core extends React.Component<IProps, any> {
 
 	public canvasContext?: CanvasRenderingContext2D;
 
-	public timeScale = 2;
+	public timeScale = 1;
 
 	private lastTime = 0;
 	private unprocessedTime = 0;

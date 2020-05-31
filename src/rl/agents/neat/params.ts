@@ -10,11 +10,11 @@ export default class NEATParams {
     // Epoch Params
 
     /**
-     * For each possible link for the initial genome, the probability of making the connection.
+     * For each possible link for the initial genome, the probability of making the connection. Note that genomes with zero links automatically get one link added to them.
      *
      * @memberof NEATParams
      */
-    public readonly probOfMakingLinkInInitialGenome = new Scalar('Epoch', 'Probability of Making Each Link In Initial Genome', 0.25).ranged(0.0001, 1);
+    public readonly probOfMakingLinkInInitialGenome = new Scalar('Epoch', 'Probability of Making Each Link In Initial Genome', 0.1).ranged(0.0001, 1);
 
     /**
      * sh c1 linear coefficient (see compatibility distance function)
@@ -82,8 +82,8 @@ export default class NEATParams {
     /**
      * Mutation rate for a hidden neuron.
      */
-    public readonly hiddenNeuronMutationRate = new Scalar('Mutation', 'Hidden Neuron Mutation Rate', 0.45).ranged(0, 1);
-    public readonly linkMutationRate = new Scalar('Mutation', 'Link Mutation Rate', 0.8).ranged(0, 1);
+    public readonly hiddenNeuronMutationRate = new Scalar('Mutation', 'Hidden Neuron Mutation Rate', 0.25).ranged(0, 1);
+    public readonly linkMutationRate = new Scalar('Mutation', 'Link Mutation Rate', 0.7).ranged(0, 1);
 
     /**
      * At the specified chance, if the two randomly selected neurons are the same neuron, a looped recurrency will be made

@@ -19,7 +19,7 @@
 #### NEAT
 
 * Better mutations
-* KNN Speciation
+* KNN speciation
 * Test RNNs and NeuralNetworks
 * Draw recurrent neurons
 

@@ -1,5 +1,6 @@
 body {
 	font-family: sans-serif;
+	/* background-color: rgb(19, 19, 19); */
 	background-size: 19px 19px;
 	background-color: #fdfdfd;
 	background-image: linear-gradient(to right, #f4f4f4 1px, transparent 1px),

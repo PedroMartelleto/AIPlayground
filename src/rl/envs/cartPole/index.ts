@@ -4,6 +4,7 @@ import Scalar from '../../scalar';
 import EnvironmentModel from '../environmentModel';
 import CartPoleObs from './obs';
 import CartPoleParams from './params';
+import Color from 'src/draw/color';
 
 export default class EnvCartPole extends EnvironmentModel {
 	private angularAcc = 0;
@@ -133,7 +134,7 @@ export default class EnvCartPole extends EnvironmentModel {
 
 		// Normal
 		Draw.setLineDash(4, 8);
-		Draw.line(0, this.params.cartHeight.value/2, 0, this.params.cartHeight.value/2 + 12*4*1.5, '#A0A0A0', 3);
+		Draw.line(0, this.params.cartHeight.value/2, 0, this.params.cartHeight.value/2 + 12*4*1.5, new Color(160,160,160), 3);
 
 		// Pole
 		Draw.setLineDash(); // Disables line dashing
@@ -147,7 +148,7 @@ export default class EnvCartPole extends EnvironmentModel {
 		Draw.normX = true;
 		Draw.setTranslation(cartX, this.params.cartHeight.value/2);
 		Draw.normX = Draw.normY = true;
-		Draw.line(0, 0, poleX, poleY, '#222222', 3);
+		Draw.line(0, 0, poleX, poleY, new Color(34,34,34), 3);
 		Draw.setTranslation(cartX, 0);
 
 		// Angle

@@ -11,12 +11,6 @@ const SCREEN_WIDTH = 256;
 const SCREEN_HEIGHT = 240;
 const ENEMY_COUNT = 5;
 
-// [1, 2]?, [4, 2]?
-// [4, 4]?
-// [3, 4]?
-// [1, 1], [1, 4], [2, 1], [2, 4], [3, 1], [3, 2], [3, 3]
-// [4, 1]
-
 export default class EnvNES extends EnvironmentModel {
     public nes: JsNES.NES;
 
@@ -41,7 +35,7 @@ export default class EnvNES extends EnvironmentModel {
      */
     private baseFitness = 0;
 
-    private readonly trainingStages = [  [2, 1] ];
+    private readonly trainingStages = [  [1, 4] ];
 
     private jumpCounter = 0;
     private longJumpCounter = 0;
@@ -209,7 +203,7 @@ export default class EnvNES extends EnvironmentModel {
             return false;
         }
 
-        if (this.hasInitGraphics && this.shouldStartEvaluation) {           
+        if (this.shouldStartEvaluation) {           
             // Gets the previous mario x to determine if the agent is stuck
             this.previousMarioX = this.marioX;
             
@@ -305,16 +299,18 @@ export default class EnvNES extends EnvironmentModel {
         Draw.clear();
 
         if (this.hasDownloadedROM) {
-            if (this.hasInitGraphics) {
+            if (this.hasInitGraphics && !this.params.disableGraphics.value) {
                 this.imageData!.data.set(this.buf8!);
 
                 Draw.context!.putImageData(this.imageData!, 4, 32);
                 Draw.context!.setTransform(1, 0, 0, 1, 0, 0);
-                
-                this.getInputs();
             } else {
                 this.initNESGraphics();
             }
+        }
+
+        if (!!this.emuManager) {
+            this.getInputs();
         }
     }
 
@@ -363,9 +359,10 @@ export default class EnvNES extends EnvironmentModel {
 
         Draw.context!.lineWidth = 3;
 
-        const tileSize = 16 * this.params.screenScale.value;
+        const tileSize = 8 * this.params.screenScale.value;
         const rowWidth = this.visionBoxWidth();
 
+        Draw.context!.lineWidth = 1;
         for (let y = 0; y < this.visionBoxHeight(); ++y) {
             for (let x = 0; x < rowWidth; ++x) {            
                 if (x === this.params.visionBoxLeft.value && y === this.params.visionBoxTop.value) {
@@ -433,6 +430,10 @@ export default class EnvNES extends EnvironmentModel {
     }
 
     private initNESGraphics() {
+        if (this.params.disableGraphics.value) {
+            return;
+        }
+
         this.imageData = Draw.context!.getImageData(0, 0, SCREEN_WIDTH * this.params.screenScale.value, SCREEN_HEIGHT * this.params.screenScale.value);
 
         Draw.context!.fillStyle = "red";
@@ -454,7 +455,7 @@ export default class EnvNES extends EnvironmentModel {
     }
 
     private setBuffer = (buffer) => {
-        if (!this.buf32) {
+        if (!this.buf32 || this.params.disableGraphics.value) {
             return;
         }
 

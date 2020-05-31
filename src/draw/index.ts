@@ -1,5 +1,8 @@
 import Genome from '../rl/agents/neat/genome';
 import NeuralNetwork from 'src/rl/agents/neat/neuralNetworks';
+import DynamicColor from './dynamicColor';
+import Color from './color';
+import ColorAnimator from './colorAnimator';
 
 export interface INeuronDrawData {
 	splitX: number;
@@ -48,28 +51,26 @@ export default class Draw {
 	 * @static
 	 * @memberof Draw
 	 */
-	public static neuronLineWidth = 0;
-	public static inputNeuronFill = '#d17d77';
-	public static inputNeuronAltFill = '#b84c44'; // "#77d18f";
-	public static inputNeuronStroke = '#454545';
-	public static hiddenNeuronFill = '#c4b17c';
-	public static hiddenNeuronAltFill = "#ab914a"; // "#9d7cc4";
-	public static hiddenNeuronStroke = '#454545';
-	public static outputNeuronFill = '#7cd985';
-	public static outputNeuronAltFill = "#d1d1d1"; // "#d97e7c";
-	public static outputNeuronStroke = '#7cd985';
-	
-	public static inputNeuronPositiveFill = "#8e9191";
-	public static inputNeuronZeroFill = "#d1d1d1";
-	public static inputNeuronNegativeFill = "#e07777";
+	public static inputNeuronLine = new DynamicColor(new Color(32,32,32), new Color(209,125,119), new Color(237,57,57));
+	public static hiddenNeuronLine = new DynamicColor(new Color(32,32,32), new Color(115,150,255), new Color(237,57,57));
+	public static outputNeuronLine = new DynamicColor(new Color(32,32,32), new Color(124,217,133), new Color(237,57,57));
 
-	public static outputNeuronPositiveFill = "#4ced76";
-	public static outputNeuronNegativeFill = "#d1d1d1";
-	
+	public static inputNeuron = new DynamicColor(new Color(32,32,32), new Color(209,209,209), new Color(237,57,57));
+	public static hiddenNeuron = new DynamicColor(new Color(32,32,32), new Color(115,150,255), new Color(237,57,57));
+	public static outputNeuron = new DynamicColor(new Color(32,32,32), new Color(76,237,118), new Color(32,32,32));
+
 	public static linkLineWidth = 1.5;
 	public static linkColor = '#454545';
-	public static neuronShadowBlur = 7;
+
 	public static linkShadowBlur = 2;
+
+	public static inputNeuronShadowBlur = 3;
+	public static hiddenNeuronShadowBlur = 10;
+	public static outputNeuronShadowBlur = 7;
+
+	public static inputNeuronRadius = 0.01;
+	public static hiddenNeuronRadius = 0.01;
+	public static outputNeuronRadius = 0.01;
 
 	/**
 	 * "Denormalizes" the given coordinate if normX is set to true.
@@ -183,9 +184,12 @@ export default class Draw {
 	 * Draw.context must be set before calling this.
 	 * X and Y must be denormalized.
 	 * Draws the given genome.
+	 * @param x
+	 * @param y
 	 * @param genome 
+	 * @param fontColor
 	 */
-	public static genome(x: number, y: number, genome: Genome) {
+	public static genome(x: number, y: number, genome: Genome, fontColor: string) {
 		const normX = Draw.normX;
 		const normY = Draw.normY;
 		const normWidth = Draw.normWidth;
@@ -202,10 +206,10 @@ export default class Draw {
 				Draw.rectFill(x + xOffset, y - 16, 48, linkGenesHeight, '#e4e4e4');
 			}
 
-			Draw.text(x + xOffset, y, linkGene.innovation!.n + '', '400 14px sans-serif', 'black');
-			Draw.text(x + xOffset, y - 32, linkGene.inNeuron.id + "->" + linkGene.outNeuron.id, '400 14px sans-serif', 'black');
+			Draw.text(x + xOffset, y, linkGene.innovation!.n + '', '400 14px sans-serif', fontColor);
+			Draw.text(x + xOffset, y - 32, linkGene.inNeuron.id + "->" + linkGene.outNeuron.id, '400 14px sans-serif', fontColor);
 
-			Draw.rectStroke(x + xOffset, y - 16, 48, linkGenesHeight, 'black');
+			Draw.rectStroke(x + xOffset, y - 16, 48, linkGenesHeight, fontColor);
 
 			xOffset += 48;
 		}
@@ -213,9 +217,9 @@ export default class Draw {
 		xOffset = 0;
 		
 		for (const neuronGene of genome.neuronGenes) {
-			Draw.text(x + xOffset, y - linkGenesHeight, neuronGene.id + '', '400 14px sans-serif', 'black');
-			Draw.text(x + xOffset, y - linkGenesHeight - 32, neuronGene.type, '400 14px sans-serif', 'black');
-			Draw.rectStroke(x + xOffset, y - linkGenesHeight - 16, 48, linkGenesHeight, 'black');
+			Draw.text(x + xOffset, y - linkGenesHeight, neuronGene.id + '', '400 14px sans-serif', fontColor);
+			Draw.text(x + xOffset, y - linkGenesHeight - 32, neuronGene.type, '400 14px sans-serif', fontColor);
+			Draw.rectStroke(x + xOffset, y - linkGenesHeight - 16, 48, linkGenesHeight, fontColor);
 			xOffset += 48;
 		}
 
@@ -255,7 +259,7 @@ export default class Draw {
 	 * @param startAngle 
 	 * @param endAngle 
 	 */
-	public static arcFill(x: number, y: number, radius: number, color = 'red', startAngle = 0, endAngle = Math.PI * 2) {
+	public static arcFill(x: number, y: number, radius: number, color: string, startAngle = 0, endAngle = Math.PI * 2) {
 		Draw.arcPath(x, y, radius, startAngle, endAngle);
 		Draw.context!.fillStyle = color;
 		Draw.context!.fill();
@@ -287,10 +291,18 @@ export default class Draw {
 	 * @param toX 
 	 * @param toY 
 	 * @param color 
+	 * @param lineWidth
+	 * @param transitionID if greater than 0, transitions from the previous color to the next.
 	 */
-	public static line(fromX: number, fromY: number, toX: number, toY: number, color = 'red', lineWidth = 5) {	
+	public static line(fromX: number, fromY: number, toX: number, toY: number, color: Color, lineWidth = 5, transitionID?: string) {
+		let strokeStyle = color.asString();
+		
+		if (!!transitionID) {
+			strokeStyle = ColorAnimator.transition(transitionID, color).asString();
+		}
+		
 		Draw.context!.lineWidth = lineWidth;
-		Draw.context!.strokeStyle = color;
+		Draw.context!.strokeStyle = strokeStyle;
 
 		const fX = Draw.coordX(fromX, 0);
 		const fY = Draw.coordY(fromY, 0);
@@ -381,7 +393,7 @@ export default class Draw {
 		Draw.context!.lineCap = cap;
 	}
 
-	public static neuralNetwork(x: number, y: number, width: number, height: number, radius: number, neurons: INeuronDrawData[], links: ILinkDrawData[], phenotype: NeuralNetwork | undefined) {
+	public static neuralNetwork(x: number, y: number, width: number, height: number, neurons: INeuronDrawData[], links: ILinkDrawData[], phenotype: NeuralNetwork | undefined) {
 		const sizeX = Draw.sizeX(width);
 		const sizeY = Draw.sizeY(height);
 		const coordX = Draw.coordX(x + width*2, sizeX + Draw.context!.canvas.width);
@@ -411,30 +423,26 @@ export default class Draw {
 			
 			const toX = coordX + sizeX * -to.splitY;
 			const toY = coordY + sizeY * to.splitX;
+			const lineWidth = Math.max(Draw.linkLineWidth * Math.abs(linkValue), 0.5);
+
+			let fill = new Color(0, 0, 0);
 
 			if (to.type === "output") {
-				const fill = linkValue < 0 ? Draw.outputNeuronAltFill : Draw.outputNeuronFill;
-				Draw.context!.shadowBlur = Draw.linkShadowBlur * linkValue;
-				Draw.context!.shadowColor = fill;
-				Draw.line(fromX, fromY, toX, toY, fill, Draw.linkLineWidth * linkValue);
+				fill = Draw.outputNeuronLine.pick(linkValue);
+			} else if (to.type === "hidden") {
+				fill = Draw.hiddenNeuronLine.pick(linkValue)
 			} else if (from.type === "input") {
-				const fill = linkValue < 0 ? Draw.inputNeuronAltFill : Draw.inputNeuronFill;
-				Draw.context!.shadowBlur = Draw.linkShadowBlur * linkValue;
-				Draw.context!.shadowColor = fill;
-				Draw.line(fromX, fromY, toX, toY, fill, Draw.linkLineWidth * linkValue);
-			} else if (from.type === "hidden") {
-				const fill = linkValue < 0 ? Draw.hiddenNeuronAltFill : Draw.hiddenNeuronFill;
-				Draw.context!.shadowBlur = Draw.linkShadowBlur * linkValue;
-				Draw.context!.shadowColor = Draw.hiddenNeuronFill;
-				Draw.line(fromX, fromY, toX, toY, fill, Draw.linkLineWidth * linkValue);
+				fill = Draw.inputNeuronLine.pick(linkValue);
 			}
+
+			Draw.context!.shadowBlur = 0; // Draw.linkShadowBlur * Math.abs(linkValue);
+			// Draw.context!.shadowColor = fill.asString();
+			Draw.line(fromX, fromY, toX, toY, fill, lineWidth, from.id + "T" + to.id);
 		}
 
 		for (const neuron of neurons) {
 			const neuronX = coordX + sizeX * -neuron.splitY;
 			const neuronY = coordY + sizeY * neuron.splitX;
-
-			Draw.context!.lineWidth = Draw.neuronLineWidth;
 			
 			let neuronValue = 0.5;
 
@@ -448,45 +456,30 @@ export default class Draw {
 			}
 
 			if (neuron.type === 'input') {
-				let fill = Draw.inputNeuronZeroFill;
+				const fill = ColorAnimator.transition("N" + neuron.id, Draw.inputNeuron.pick(neuronValue)).asString();
 
-				if (neuronValue < 0) {
-					fill = Draw.inputNeuronNegativeFill;
-				} else if (neuronValue > 0) {
-					fill = Draw.inputNeuronPositiveFill;
-				}
-
-				Draw.context!.shadowBlur = Draw.neuronShadowBlur * Math.abs(neuronValue);
+				Draw.context!.shadowBlur = Draw.inputNeuronShadowBlur * Math.abs(neuronValue);
 				Draw.context!.shadowColor = fill;
-				Draw.arcFill(neuronX, neuronY, radius, fill);
-				Draw.context!.strokeStyle = Draw.inputNeuronStroke;
-
-				if (Draw.inputNeuronStroke !== 'null') {
-					Draw.context!.strokeStyle = Draw.inputNeuronStroke;
-					// Draw.context!.stroke();
-				}
+				Draw.arcFill(neuronX, neuronY, Draw.inputNeuronRadius, fill);
 			} else if (neuron.type === 'hidden') {
-				const fill = neuronValue < 0 ? Draw.hiddenNeuronAltFill : Draw.hiddenNeuronFill;
-
-				Draw.context!.shadowBlur = Draw.neuronShadowBlur * Math.abs(neuronValue);
-				Draw.context!.shadowColor = fill;
-				Draw.arcFill(neuronX, neuronY, radius, fill);
+				const fill = ColorAnimator.transition("N" + neuron.id, Draw.hiddenNeuron.pick(neuronValue)).asString();
+				const previous = Draw.context!.globalCompositeOperation;
 				
-				if (Draw.hiddenNeuronStroke !== 'null') {
-					Draw.context!.strokeStyle = Draw.hiddenNeuronStroke;
-					// Draw.context!.stroke();
-				}
+				const blur = Draw.hiddenNeuronShadowBlur * Math.abs(neuronValue);
+
+				Draw.context!.globalCompositeOperation = "lighter";
+				Draw.context!.shadowBlur = blur;
+				Draw.context!.shadowColor = fill;
+
+				Draw.arcFill(neuronX, neuronY, Draw.hiddenNeuronRadius, fill);
+
+				Draw.context!.globalCompositeOperation = previous;
 			} else if (neuron.type === 'output') {
-				const fill = neuronValue < 0 ? Draw.outputNeuronNegativeFill : Draw.outputNeuronPositiveFill;
-				
-				Draw.context!.shadowBlur = Draw.neuronShadowBlur * Math.abs(neuronValue);
-				Draw.context!.shadowColor = fill;
-				Draw.arcFill(neuronX, neuronY, radius, fill);
+				const fill = ColorAnimator.transition("N" + neuron.id, Draw.outputNeuron.pick(neuronValue)).asString();
 
-				if (Draw.outputNeuronStroke !== 'null') {
-					Draw.context!.strokeStyle = Draw.outputNeuronStroke;
-					// Draw.context!.stroke();
-				}
+				Draw.context!.shadowBlur = Draw.outputNeuronShadowBlur * Math.abs(neuronValue);
+				Draw.context!.shadowColor = fill;
+				Draw.arcFill(neuronX, neuronY, Draw.outputNeuronRadius, fill);
 			}
 		}
 

@@ -148,13 +148,21 @@ export default class NEATAgent extends AgentModel {
 			Draw.normWidth = Draw.normHeight = true;
 
 			if (!!this.popDrawData && !!this.popDrawData[this.popDrawIndex] && !!this.popDrawData[this.popDrawIndex].neurons && !!this.phenotype) {
-				Draw.neuralNetwork(0, 0.1, 0.3, 0.5, 0.003, this.popDrawData[this.popDrawIndex].neurons, this.popDrawData[this.popDrawIndex].links, this.phenotype);
+				Draw.linkShadowBlur = 0;
+				Draw.inputNeuronShadowBlur = 10;
+				Draw.hiddenNeuronShadowBlur = 20;
+				Draw.outputNeuronShadowBlur = 10;
+				Draw.inputNeuronRadius = 0.005;
+				Draw.hiddenNeuronRadius = 0.006;
+				Draw.outputNeuronRadius = 0.0065;
+				Draw.linkLineWidth = 1;
+				// Draw.neuralNetwork(0, 0, 0.4, 0.95, this.popDrawData[this.popDrawIndex].neurons, this.popDrawData[this.popDrawIndex].links, this.phenotype);
 			}
-
+			/*
 			// Draws genotype
 			Draw.normX = Draw.normY = false;
 			Draw.text(-Draw.width()/2 + 64, -Draw.height()/3.2, 'Genotype:', '300 21px sans-serif', 'black');
-			Draw.genome(-Draw.width()/2 + 64, -Draw.height()/2.9, this.currentGenome!);
+			Draw.genome(-Draw.width()/2 + 64, -Draw.height()/2.9, this.currentGenome!, 'black');
 			Draw.normX = Draw.normY = true;
 
 			// Draws phenotype label
@@ -162,16 +170,15 @@ export default class NEATAgent extends AgentModel {
 			Draw.text(-Draw.width()/2 + 64, 0.34, 'Phenotype:', '300 21px sans-serif', 'black');
 			Draw.normX = true;
 			
-			/*
+			
 			// Draws all latex formulas
 			let yOffset = 0;
 			for (const formula of this.latexFormula) {
 				yOffset += 0.05;
 				Draw.text(0, -0.34 - yOffset, formula, '300 19px sans-serif', 'black');
 			}
-			*/
-
-			/*const width = 1 / this.popDrawData.length;
+			
+			const width = 1 / this.popDrawData.length;
 			
 			for (let i = 0; i < this.community.genomes.length; ++i) {
 				if (i === this.popDrawIndex) {

@@ -2,6 +2,7 @@ import Scalar from "../../scalar";
 
 export default class NESParams {
     public readonly screenScale = new Scalar("Screen", "Scale", 2).wholeNumber().ranged(1, 5);
+    public readonly disableGraphics = new Scalar("Screen", "Disable Graphics", 0).wholeNumber().ranged(0, 1);
 
     public readonly fitnessXWeight = new Scalar("Fitness", "X Distance", 1).ranged(0.001, 100);
     public readonly fitnessSpeedWeight = new Scalar("Fitness", "Speed", 0.1).ranged(0.001, 100);
