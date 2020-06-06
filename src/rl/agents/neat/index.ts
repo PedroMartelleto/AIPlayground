@@ -156,7 +156,7 @@ export default class NEATAgent extends AgentModel {
 				Draw.hiddenNeuronRadius = 0.006;
 				Draw.outputNeuronRadius = 0.0065;
 				Draw.linkLineWidth = 1;
-				// Draw.neuralNetwork(0, 0, 0.4, 0.95, this.popDrawData[this.popDrawIndex].neurons, this.popDrawData[this.popDrawIndex].links, this.phenotype);
+				Draw.neuralNetwork(0, 0, 0.4, 0.95, this.popDrawData[this.popDrawIndex].neurons, this.popDrawData[this.popDrawIndex].links, this.phenotype);
 			}
 			/*
 			// Draws genotype

@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d5b6c6d0.chunk.css",
+    "main.js": "/static/js/main.6aa9907d.chunk.js",
+    "main.js.map": "/static/js/main.6aa9907d.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.7ac8c85d.js",
+    "runtime-main.js.map": "/static/js/runtime-main.7ac8c85d.js.map",
+    "static/js/2.665f1f97.chunk.js": "/static/js/2.665f1f97.chunk.js",
+    "static/js/2.665f1f97.chunk.js.map": "/static/js/2.665f1f97.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.ffcbc19785c0e90fc9fa1c0162d2b18e.js": "/precache-manifest.ffcbc19785c0e90fc9fa1c0162d2b18e.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.d5b6c6d0.chunk.css.map": "/static/css/main.d5b6c6d0.chunk.css.map",
+    "static/js/2.665f1f97.chunk.js.LICENSE.txt": "/static/js/2.665f1f97.chunk.js.LICENSE.txt",
+    "static/media/NES.png": "/static/media/NES.bf70de11.png",
+    "static/media/background.png": "/static/media/background.dd6aa4cd.png",
+    "static/media/birdGame.png": "/static/media/birdGame.215e76f0.png",
+    "static/media/dice.svg": "/static/media/dice.aff815a0.svg",
+    "static/media/neat.svg": "/static/media/neat.cfd3585d.svg",
+    "static/media/pole-balancing.svg": "/static/media/pole-balancing.5027a009.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7ac8c85d.js",
+    "static/js/2.665f1f97.chunk.js",
+    "static/css/main.d5b6c6d0.chunk.css",
+    "static/js/main.6aa9907d.chunk.js"
+  ]
+}

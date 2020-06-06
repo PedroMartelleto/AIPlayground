@@ -50,7 +50,7 @@ export default class Core extends React.Component<IProps, any> {
     }
 
 	public render() {
-		// As a convention, if the agent is not specified this core component is for a environment
+		// As a convention, if the agent is not specified this core component is for an environment
 		if (!!this.props.env) {
 			return (
 				<SwipeableTabs
@@ -81,16 +81,16 @@ export default class Core extends React.Component<IProps, any> {
 	}
 
 	private update(delta: number) {
-		if (this.props.agent) {
+		if (!!this.props.agent) {
 			this.props.agent!.loop(delta);
 		}
 	}
 
 	private draw(timeStamp: number) {
-		if (this.canvasContext) {
+		if (!!this.canvasContext) {
 			if (this.props.agent) {
 				this.props.agent!.draw(this.canvasContext!);
-			} else if (this.props.env) {			
+			} else if (!!this.props.env) {			
 				this.props.env!.draw(this.canvasContext!);
 
 				// Draws performance meter
@@ -161,10 +161,10 @@ export default class Core extends React.Component<IProps, any> {
 	}
 
 	private ref(canvas: HTMLCanvasElement) {
-		if (canvas) {
+		if (!!canvas) {
 			const ctx = canvas.getContext('2d');
 
-			if (ctx) {
+			if (!!ctx) {
 				this.canvasContext = ctx;
 			}
 
@@ -173,7 +173,7 @@ export default class Core extends React.Component<IProps, any> {
 	}
 
 	private resize() {
-		if (this.canvasContext) {
+		if (!!this.canvasContext) {
 			this.canvasContext.canvas.width = this.canvasContext.canvas.offsetWidth;
 			this.canvasContext.canvas.height = this.canvasContext.canvas.offsetHeight;
 		}

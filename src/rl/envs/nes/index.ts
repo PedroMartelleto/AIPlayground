@@ -27,6 +27,9 @@ export default class EnvNES extends EnvironmentModel {
     private stageIndex = 0;
     private repeatCount = 0;
 
+    // Maximum mario x for current genome
+    private maxMarioX: number = 0;
+
     /**
      * Fitness accumulated from other levels
      *
@@ -35,7 +38,7 @@ export default class EnvNES extends EnvironmentModel {
      */
     private baseFitness = 0;
 
-    private readonly trainingStages = [  [1, 4] ];
+    private readonly trainingStages = [  [1, 3] ];
 
     private jumpCounter = 0;
     private longJumpCounter = 0;
@@ -59,6 +62,7 @@ export default class EnvNES extends EnvironmentModel {
     private actionJumpLong = new Scalar("NES Controller", "Long Jump (A)", 0).wholeNumber().ranged(0, 1);
     private actionRight = new Scalar("NES Controller", "Go Right (RIGHT)", 0).wholeNumber().ranged(0, 1);
     private actionRun = new Scalar("NES Controller", "Run (B)", 0).wholeNumber().ranged(0, 1);
+    private actionLeft = new Scalar("NES Controller", "Go Left (LEFT)", 0).wholeNumber().ranged(0, 1);
 
     public constructor() {
         super('nes');
@@ -85,6 +89,7 @@ export default class EnvNES extends EnvironmentModel {
         this.addAction(this.actionJumpLong);
         this.addAction(this.actionRight);
         this.addAction(this.actionRun);
+        this.addAction(this.actionLeft);
 
         this.nes = new JsNES.NES({
             onFrame: this.setBuffer,
@@ -188,6 +193,7 @@ export default class EnvNES extends EnvironmentModel {
         this.longJumpCounter = 0;
         this.stageIndex = 0;
         this.baseFitness = 0;
+        this.maxMarioX = 0;
     }
 
     public processAction(action: Scalar, button: number) {
@@ -211,10 +217,14 @@ export default class EnvNES extends EnvironmentModel {
             this.marioX = this.emuManager.memGet.xPosition();
             this.marioY = this.emuManager.memGet.yPixel() + 32;
 
-            if (Math.abs(this.previousMarioX - this.marioX) < 2) {
+            if (this.marioX <= this.maxMarioX) {
                 this.numberOfFramesStuck += 1;
             } else {
                 this.numberOfFramesStuck = 0;
+            }
+
+            if (this.marioX > this.maxMarioX) {
+                this.maxMarioX = this.marioX;
             }
 
             // Stops the evaluation if mario is stuck
@@ -249,6 +259,7 @@ export default class EnvNES extends EnvironmentModel {
             // Other actions
             this.processAction(this.actionRun, JsNES.Controller.BUTTON_B);
             this.processAction(this.actionRight, JsNES.Controller.BUTTON_RIGHT);
+            this.processAction(this.actionLeft, JsNES.Controller.BUTTON_LEFT);
 
             this.emuManager.memSet.nes.frame();
 

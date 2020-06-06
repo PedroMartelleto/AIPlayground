@@ -14,7 +14,7 @@ export default class ColorAnimator {
         }
 
         if (!ColorAnimator.fromColors[transitionID].equals(color)) {
-            ColorAnimator.tMap[transitionID] += 0.07;
+            ColorAnimator.tMap[transitionID] += 0.064;
 
             if (ColorAnimator.tMap[transitionID] > 1) {
                 ColorAnimator.tMap[transitionID] = 1;

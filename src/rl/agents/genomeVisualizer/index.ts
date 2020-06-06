@@ -45,7 +45,11 @@ export default class GenomeVisualizerAgent extends AgentModel {
 		this.currentGenome = genome;
         this.phenotype = genome.createPhenotype();
         this.latexFormula = this.phenotype!.generateFormula(this.env.obsFormulaNames(), 2);
-		console.log(this.latexFormula);
+		
+		for (let i = 0; i < genome.outputCount; ++i) {
+			console.log(this.env.actions[i].name, this.latexFormula[i]);
+		}
+
 		++this.popDrawIndex;
 	}
 

@@ -462,18 +462,13 @@ export default class Draw {
 				Draw.context!.shadowColor = fill;
 				Draw.arcFill(neuronX, neuronY, Draw.inputNeuronRadius, fill);
 			} else if (neuron.type === 'hidden') {
-				const fill = ColorAnimator.transition("N" + neuron.id, Draw.hiddenNeuron.pick(neuronValue)).asString();
-				const previous = Draw.context!.globalCompositeOperation;
-				
+				const fill = ColorAnimator.transition("N" + neuron.id, Draw.hiddenNeuron.pick(neuronValue)).asString();			
 				const blur = Draw.hiddenNeuronShadowBlur * Math.abs(neuronValue);
 
-				Draw.context!.globalCompositeOperation = "lighter";
 				Draw.context!.shadowBlur = blur;
 				Draw.context!.shadowColor = fill;
 
 				Draw.arcFill(neuronX, neuronY, Draw.hiddenNeuronRadius, fill);
-
-				Draw.context!.globalCompositeOperation = previous;
 			} else if (neuron.type === 'output') {
 				const fill = ColorAnimator.transition("N" + neuron.id, Draw.outputNeuron.pick(neuronValue)).asString();
 
