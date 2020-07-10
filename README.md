@@ -1,38 +1,43 @@
 # aiplayground.ts
 
-## Commiting
-> ./commit.sh "My Commit Message"
+An online environment for playing with different reinforcement learning algorithms.
 
-## Remotes
+## Getting Started
 
-#### GitHub Remote ("origin")
+### Prerequisites
 
-* The Master Branch ("master"). Contains the code in ./src/*. To push to master:
-> ./push-master.sh
+> [Node](https://nodejs.org)
 
-#### BitBucket Remote ("private")
+### Installing
 
-* The Private Branch ("private"). Includes every file/code not auto-generated and serves as a backup for the project.
+Clone the repository
 
-## TODOS
+```
+git clone https://github.com/pedromartelleto/aiplayground.git
+```
 
-#### NEAT
+Install dependencies
 
-* Better mutations
-* KNN speciation
-* Test RNNs and NeuralNetworks
-* Draw recurrent neurons
+```
+npm install
+```
 
-#### UI
+Run
 
-* Top toolbar (benchmark, return, save neural network, start, end, pause, toggle enabling update while not visible)
-* Learn more InfoCard button functionality
-* A small more info hover text on the params tab
+```
+npm start
+```
 
-#### Others
+## Running the tests
 
-* Separe and async page loading
-* Obs restrictions
-* Actions restrictions?
-* Other envs
-* Other agents
+```
+npm test
+```
+
+## Versioning
+
+See [Semantic Versioning](http://semver.org/). For the versions available, see the [tags on this repository](https://github.com/pedromartelleto/mathweb/tags).
+
+## License
+
+This project is licensed under GPLv3 - see the [LICENSE.md](LICENSE.md) file for details.
