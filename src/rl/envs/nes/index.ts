@@ -38,7 +38,7 @@ export default class EnvNES extends EnvironmentModel {
      */
     private baseFitness = 0;
 
-    private readonly trainingStages = [  [1, 3] ];
+    private readonly trainingStages = [  [1, 1] ];
 
     private jumpCounter = 0;
     private longJumpCounter = 0;
@@ -413,18 +413,19 @@ export default class EnvNES extends EnvironmentModel {
         }
     }
 
-    private getTile(dx, dy) {
-        const x = this.marioX + dx + 8;
-        const y = this.marioY + dy - 16;
-        const page = Math.floor(x/256)%2;
+    private getTile(dx: number, dy: number) {
+        const FRAG = 8
+        const x = this.marioX + dx + FRAG;
+        const y = this.marioY + dy - FRAG*2;
+        const page = Math.floor(x / 256) % 2;
  
-        const subx = Math.floor((x%256)/16);
-        const suby = Math.floor((y - 32)/16);
-        const addr = 0x500 + page*13*16 + suby*16 + subx;
-               
-        if (suby >= 13 || suby < 0) { return 0; }
-               
-        if (this.nes.cpu.mem[addr] !== 0) { return 1; }
+        const subX = Math.floor((x % 256) / (FRAG*2));
+        const subY = Math.floor((y - FRAG*4) / (FRAG*2));
+        const addr = 0x500 + page*13*FRAG*2 + subY*FRAG*2 + subX;
+
+        if (subY >= 13 || subY < 0) return 0;
+
+        if (this.nes.cpu.mem[addr] !== 0) return 1;
         else { return 0; }
     }
 
