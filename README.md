@@ -1,4 +1,4 @@
-# aiplayground.ts
+# aiplayground
 
 An online environment for playing with different reinforcement learning algorithms.
 
