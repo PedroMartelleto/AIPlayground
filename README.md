@@ -1,4 +1,4 @@
-# aiplayground (aiplayground.web.app)
+# aiplayground (https://aiplayground.web.app)
 
 An online environment for playing with different reinforcement learning algorithms.
 
