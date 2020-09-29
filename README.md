@@ -1,7 +1,7 @@
 # aiplayground
 
-An online environment for playing with different reinforcement learning algorithms.
-You can play with a deployed version here: https://aiplayground.web.app.
+An online environment for playing around with different reinforcement learning algorithms.
+You can try a deployed version here: https://aiplayground.web.app.
 
 ## Getting Started
 
