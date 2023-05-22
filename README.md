@@ -1,6 +1,6 @@
 # aiplayground
 
-An online environment for exploring different types of reinforcement learning algorithms.
+An online environment for exploring different types of neuroevolution algorithms.
 [Demo here](https://aiplayground.web.app).
 
 <p>
